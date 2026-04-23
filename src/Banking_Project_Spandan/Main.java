@@ -4,9 +4,61 @@ package Banking_Project_Spandan;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+//bank class
+
+
+class Bank {
+    final String name;
+    final String password;
+    final String accNumber;
+    String accType="deposit";
+    private double bankBalance=0;
 
 
 
+    Bank(String username, String password, String accNumber){
+        this.name=username;
+        this.password=password;
+        this.accNumber=accNumber;
+
+    }
+
+    public double checkBalance(){
+        return bankBalance;
+    }
+
+    public void deposit(double amount){
+        bankBalance+=amount;
+        System.out.printf("Successfully deposited amount ₹%.2f\n", amount);
+    }
+
+    public void withdraw(double amount){
+        double tempBalance=bankBalance-amount;
+        if((amount>0 && amount <=bankBalance)&&(tempBalance>=1000)){
+            bankBalance-=amount;
+            System.out.printf("Successfully withdrawn amount ₹%.2f\n", amount);
+        }
+        else{
+            System.out.println("Invalid withdrawl!");
+        }
+    }
+
+    public void changeAccountType(String accType){
+        this.accType=accType;
+    }
+
+    public void showAccount(){
+        System.out.printf("Name: %s\n",this.name);
+        System.out.printf("Account Number: %s\n",this.accNumber);
+        System.out.printf("Account Type: %s\n",this.accType);
+        System.out.printf("Current Balance: %.2f\n",this.bankBalance);
+    }
+}
+
+
+
+
+//main class
 public class Main {
     public static void main (String[]args){
         Scanner sc= new Scanner(System.in);
@@ -17,9 +69,11 @@ public class Main {
         HashMap<String, String> users = new HashMap<>();
         do{
             try {
+                String name;
                 String username;
                 String password;
                 String accType;
+                String accNumber;
 
                 System.out.println("*********************");
                 System.out.println("AUTHENTICATION MENU: ");
@@ -35,9 +89,9 @@ public class Main {
                     case 1:
                         sc.nextLine();
                         System.out.println("*********************");
-                        System.out.print("Enter username: ");
-                        username = sc.nextLine();
-
+                        System.out.print("Enter Name: ");
+                        name = sc.nextLine();
+                        username= name.toLowerCase().trim();
                         System.out.print("Enter password: ");
                         password = sc.nextLine();
                         System.out.println("*********************");
@@ -53,16 +107,18 @@ public class Main {
                         Bank user=null;
                         sc.nextLine();
                         System.out.println("*********************");
-                        System.out.print("Enter username: ");
-                        username = sc.nextLine();
+                        System.out.print("Enter Name: ");
+                        name = sc.nextLine();
 
                         System.out.print("Enter password: ");
                         password = sc.nextLine();
+                        System.out.print("Enter Account Number: ");
+                        accNumber=sc.nextLine();
                         System.out.println("*********************");
-
+                        username=name.toLowerCase().trim();
                         for(String key: users.keySet()){
                             if(username.equals(key) && password.equals(users.get(key))){
-                                user = new Bank(key,users.get(key));
+                                user = new Bank(name,users.get(key),accNumber);
                                 login=true;
                             }
                         }
